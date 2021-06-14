@@ -1,6 +1,6 @@
 import unittest
 
-from pyzh import split, convert
+from pyzh import split, convert, annotate
 
 class TestSplit(unittest.TestCase):
 
@@ -58,6 +58,12 @@ class TestConvert(unittest.TestCase):
         s = "the word that I want to say is ㄋㄧ ㄏㄠ"
         self.assertEqual(convert(s), "the word that I want to say is nī hāo")
 
+
+class TestAnnotate(unittest.TestCase):
+
+    def test_annotate(self):
+        s = "你好 is how you say hi in chinese"
+        self.assertEqual(annotate(s), "你好(nǐhǎo / ㄋㄧˇ ㄏㄠˇ) is how you say hi in chinese")
 
 if __name__ == "__main__":
     unittest.main()

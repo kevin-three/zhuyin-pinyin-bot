@@ -1,4 +1,4 @@
-from dragonmapper import transcriptions
+from dragonmapper import transcriptions, hanzi
 
 def list_get(l, i, default=None):
     try:
@@ -39,11 +39,23 @@ def convert(text):
 
     result = ""
 
-    for segment,delim in split(text):
+    for segment,delim in split(text, " (){},"):
         if transcriptions.is_zhuyin(segment):
             result += transcriptions.to_pinyin(segment) + delim
         elif transcriptions.is_pinyin(segment):
             result += transcriptions.to_zhuyin(segment) + delim
+        else:
+            result += segment + delim
+
+    return result
+
+def annotate(text):
+
+    result = ""
+
+    for segment,delim in split(text):
+        if hanzi.has_chinese(segment):
+            result += f"{segment}({hanzi.to_pinyin(segment)} / {hanzi.to_zhuyin(segment)}){delim}"
         else:
             result += segment + delim
 
