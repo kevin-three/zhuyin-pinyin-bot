@@ -46,6 +46,10 @@ class TestConvert(unittest.TestCase):
         s = "nǐ hǎo"
         self.assertEqual(convert(s), "ㄋㄧˇ ㄏㄠˇ")
 
+    def test_tone_spaceless_pinyin(self):
+        s = "nǐhǎo"
+        self.assertEqual(convert(s), "ㄋㄧˇ ㄏㄠˇ")
+
     def test_zhuyin(self):
         s = "ㄋㄧˇ ㄏㄠˇ"
         self.assertEqual(convert(s), "nǐ hǎo")
@@ -63,7 +67,15 @@ class TestAnnotate(unittest.TestCase):
 
     def test_annotate(self):
         s = "你好 is how you say hi in chinese"
-        self.assertEqual(annotate(s), "你好(nǐhǎo / ㄋㄧˇ ㄏㄠˇ) is how you say hi in chinese")
+        self.assertEqual(annotate(s), "你好(nǐ hǎo / ㄋㄧˇ ㄏㄠˇ) is how you say hi in chinese")
+
+    def test_annotate_long(self):
+        s = "测试一段非常长的文本"
+        self.assertEqual(annotate(s), "测试一段非常长的文本(cè shì yī duàn fēi cháng zhǎng de wén běn / ㄘㄜˋ ㄕˋ ㄧ ㄉㄨㄢˋ ㄈㄟ ㄔㄤˊ ㄓㄤˇ ㄉㄜ˙ ㄨㄣˊ ㄅㄣˇ)")
+
+    def test_annotate_sentences(self):
+        s = "测试。测试"
+        self.assertEqual(annotate(s), "测试(cè shì / ㄘㄜˋ ㄕˋ)。测试(cè shì / ㄘㄜˋ ㄕˋ)")
 
 if __name__ == "__main__":
     unittest.main()

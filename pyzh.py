@@ -35,11 +35,13 @@ def split(text, delim=' '):
     return list(filter(lambda e: e != ("",""), [(elem, list_get(result_delims, i, "")) for i,elem in enumerate(result_acc)]))
 
 
+splitters = " (){},。，（）\"\t"
+
 def convert(text):
 
     result = ""
 
-    for segment,delim in split(text, " (){},"):
+    for segment,delim in split(text, splitters):
         if transcriptions.is_zhuyin(segment):
             result += transcriptions.to_pinyin(segment) + delim
         elif transcriptions.is_pinyin(segment):
@@ -53,9 +55,11 @@ def annotate(text):
 
     result = ""
 
-    for segment,delim in split(text):
+    for segment,delim in split(text, splitters):
         if hanzi.has_chinese(segment):
-            result += f"{segment}({hanzi.to_pinyin(segment)} / {hanzi.to_zhuyin(segment)}){delim}"
+            zhuyin = hanzi.to_zhuyin(segment)       # convert to zhuyin first so that spaces are added in
+                                                    # the final pinyin for readability
+            result += f"{segment}({transcriptions.to_pinyin(zhuyin)} / {zhuyin}){delim}"
         else:
             result += segment + delim
 
